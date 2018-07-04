@@ -35,14 +35,15 @@ namespace SqlBuilder.Sql
 			this.Parameters = parameters;
 		}
 
-		public void Append(IOrderBy expression)
-		{
-			this._expressions.Add(expression);
-		}
-
 		public void Clear()
 		{
 			this._expressions.Clear();
+		}
+
+		public IOrderByList Append(IOrderBy expression)
+		{
+			this._expressions.Add(expression);
+			return this;
 		}
 
 		public IOrderByList Ascending(params string[] columns)
@@ -55,6 +56,13 @@ namespace SqlBuilder.Sql
 			return this;
 		}
 
+		public IOrderByList AscendingValue(string column, string tableAlias)
+		{
+			IOrderBy expression = OrderBy.Ascending(column, tableAlias);
+			this.Append(expression);
+			return this;
+		}
+
 		public IOrderByList Descending(params string[] columns)
 		{
 			foreach (string column in columns)
@@ -62,6 +70,20 @@ namespace SqlBuilder.Sql
 				IOrderBy expression = OrderBy.Descending(column);
 				this.Append(expression);
 			}
+			return this;
+		}
+
+		public IOrderByList DescendingValue(string column, string tableAlias)
+		{
+			IOrderBy expression = OrderBy.Descending(column, tableAlias);
+			this.Append(expression);
+			return this;
+		}
+
+		public IOrderByList Raw(string rawSql)
+		{
+			IOrderBy expression = OrderBy.Raw(rawSql);
+			this.Append(expression);
 			return this;
 		}
 
@@ -76,7 +98,10 @@ namespace SqlBuilder.Sql
 					sb.Append(", ");
 				else
 					sep = true;
-				sb.Append(SqlBuilder.FormatColumn(expression.Column, this.Parameters, tableAlias) + " " + expression.GetDirection());
+				if (expression.IsRaw)
+					sb.Append(expression.Column);
+				else
+					sb.Append(SqlBuilder.FormatColumn(expression.Column, this.Parameters, tableAlias) + " " + expression.GetDirection());
 			}
 
 			return sb.ToString();

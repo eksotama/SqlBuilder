@@ -16,11 +16,17 @@ namespace SqlBuilder.Interfaces
 
 		void Clear();
 
-		void Append(IOrderBy expression);
+		IOrderByList Append(IOrderBy expression);
+
+		IOrderByList Raw(string rawSql);
 
 		IOrderByList Ascending(params string[] columns);
 
+		IOrderByList AscendingValue(string column, string tableAlias);
+
 		IOrderByList Descending(params string[] columns);
+
+		IOrderByList DescendingValue(string column, string tableAlias);
 
 	}
 

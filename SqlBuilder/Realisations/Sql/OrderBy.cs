@@ -14,6 +14,10 @@ namespace SqlBuilder.Sql
 
 		public string Column { get; set; }
 
+		public string TableAlias { get; set; } = string.Empty;
+
+		public bool IsRaw { get; set; } = false;
+
 		public OrderBy(string column, OrderDirection direction = OrderDirection.ASC)
 		{
 			this.Column = column;
@@ -32,14 +36,28 @@ namespace SqlBuilder.Sql
 			}
 		}
 
-		public static IOrderBy Ascending(string column)
+		public static IOrderBy Ascending(string column, string tableAlias = "", bool isRaw = false)
 		{
-			return new OrderBy(column, OrderDirection.ASC);
+			IOrderBy result = new OrderBy(column, OrderDirection.ASC);
+			result.IsRaw = isRaw;
+			result.TableAlias = tableAlias;
+			return result;
 		}
 
-		public static IOrderBy Descending(string column)
+		public static IOrderBy Descending(string column, string tableAlias = "", bool isRaw = false)
 		{
-			return new OrderBy(column, OrderDirection.DESC);
+			IOrderBy result = new OrderBy(column, OrderDirection.DESC);
+			result.IsRaw = isRaw;
+			result.TableAlias = tableAlias;
+			return result;
+		}
+
+		public static IOrderBy Raw(string value)
+		{
+			IOrderBy result = new OrderBy(value, OrderDirection.RAW);
+			result.IsRaw = true;
+			result.TableAlias = string.Empty;
+			return result;
 		}
 
 	}

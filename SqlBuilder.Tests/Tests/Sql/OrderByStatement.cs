@@ -109,6 +109,19 @@ namespace SqlBuilder.Tests
 			Assert.AreEqual(sql, result);
 		}
 
+		[TestMethod]
+		[TestCategory("OrderBy")]
+		public void OrderByRaw()
+		{
+			SqlBuilder.DefaultFormatter = FormatterLibrary.MsSql;
+
+			OrderByList o = new OrderByList(SqlBuilder.DefaultFormatter);
+			o.Raw("[c] ASC, [d] DESC");
+			string result = o.GetSql("t");
+			string sql = "[c] ASC, [d] DESC";
+			Assert.AreEqual(sql, result);
+		}
+
 	}
 
 }

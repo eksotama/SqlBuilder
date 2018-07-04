@@ -5,7 +5,8 @@
 	{
 		None = 0,
 		ASC = 1,
-		DESC = 2
+		DESC = 2,
+		RAW = 3,
 	}
 
 }
