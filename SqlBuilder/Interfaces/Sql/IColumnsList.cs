@@ -18,10 +18,13 @@ namespace SqlBuilder.Interfaces
 
 		void Clear();
 
+		string TableAlias { get; set; }
+
 	}
 
 	public interface IColumnsList<out T> where T: IColumnsList
 	{
+
 		T Append(IColumn expression);
 
 		T Append(params string[] names);
@@ -31,6 +34,9 @@ namespace SqlBuilder.Interfaces
 		T Raw(string rawSql, string alias = "");
 
 		T Raw(params string[] rawSql);
+
+		T SetTableAlias(string tableAlias = "");
+
 	}
 
 	public interface IColumnsListSimple : IColumnsList, IColumnsList<IColumnsListSimple>

@@ -111,7 +111,7 @@ namespace SqlBuilder.Tests
 
 		[TestMethod]
 		[TestCategory("OrderBy")]
-		public void OrderByRaw()
+		public void OrderByRaw1()
 		{
 			SqlBuilder.DefaultFormatter = FormatterLibrary.MsSql;
 
@@ -119,6 +119,63 @@ namespace SqlBuilder.Tests
 			o.Raw("[c] ASC, [d] DESC");
 			string result = o.GetSql("t");
 			string sql = "[c] ASC, [d] DESC";
+			Assert.AreEqual(sql, result);
+		}
+
+		[TestMethod]
+		[TestCategory("OrderBy")]
+		public void OrderByRaw2()
+		{
+			SqlBuilder.DefaultFormatter = FormatterLibrary.MsSql;
+
+			OrderByList o = new OrderByList(SqlBuilder.DefaultFormatter);
+			o.Raw("[c] ASC").Raw("[d] DESC");
+			string result = o.GetSql("t");
+			string sql = "[c] ASC, [d] DESC";
+			Assert.AreEqual(sql, result);
+		}
+
+		[TestMethod]
+		[TestCategory("OrderBy")]
+		public void OrderByTableAlias1()
+		{
+			SqlBuilder.DefaultFormatter = FormatterLibrary.MsSql;
+
+			OrderByList o = new OrderByList(SqlBuilder.DefaultFormatter);
+			o.Raw("[a] ASC");
+			o.Ascending("as1");
+			o.Descending("ds2");
+			o.SetTableAlias("ttt");
+			o.Ascending("at1");
+			o.SetTableAlias("ddd");
+			o.Descending("at2");
+			o.SetTableAlias();
+			o.Descending("b");
+
+			string result = o.GetSql("t");
+			string sql = "[a] ASC, [t].[as1] ASC, [t].[ds2] DESC, [ttt].[at1] ASC, [ddd].[at2] DESC, [t].[b] DESC";
+			Assert.AreEqual(sql, result);
+		}
+
+		[TestMethod]
+		[TestCategory("OrderBy")]
+		public void OrderByTableAlias2()
+		{
+			SqlBuilder.DefaultFormatter = FormatterLibrary.MsSql;
+
+			OrderByList o = new OrderByList(SqlBuilder.DefaultFormatter);
+			o.Raw("[a] ASC");
+			o.Ascending("as1");
+			o.Descending("ds2");
+			o.SetTableAlias("ttt");
+			o.Ascending("at1");
+			o.SetTableAlias("ddd");
+			o.Descending("at2");
+			o.SetTableAlias();
+			o.Descending("b");
+
+			string result = o.GetSql();
+			string sql = "[a] ASC, [as1] ASC, [ds2] DESC, [ttt].[at1] ASC, [ddd].[at2] DESC, [b] DESC";
 			Assert.AreEqual(sql, result);
 		}
 

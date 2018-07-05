@@ -72,7 +72,6 @@ namespace SqlBuilder.Tests
 			Assert.AreEqual(sql, result);
 		}
 
-
 		[TestMethod]
 		[TestCategory("GroupBy")]
 		public void GroupByAggregation1()
@@ -164,15 +163,94 @@ namespace SqlBuilder.Tests
 			g.FuncSum("sm", "asm");
 			g.FuncMax("mx", "amx");
 			g.FuncMin("mn", "amn");
+			g.FuncCount("fg", "acn");
 
 			string result1 = g.GetSql();
-			string sql1 = "[sm], [mx], [mn]";
+			string sql1 = "[sm], [mx], [mn], [fg]";
 			string result2 = c.GetSql();
-			string sql2 = "SUM([sm]) as 'asm', MAX([mx]) as 'amx', MIN([mn]) as 'amn'";
+			string sql2 = "SUM([sm]) as 'asm', MAX([mx]) as 'amx', MIN([mn]) as 'amn', COUNT([fg]) as 'acn'";
 
 			Assert.AreEqual(sql1, result1);
 			Assert.AreEqual(sql2, result2);
 			Assert.AreEqual(c.Count, g.Count);
+		}
+
+		[TestMethod]
+		[TestCategory("GroupBy")]
+		public void GroupByRaw1()
+		{
+			SqlBuilder.DefaultFormatter = FormatterLibrary.MsSql;
+
+			ColumnsListAggregation c = new ColumnsListAggregation(SqlBuilder.DefaultFormatter);
+			GroupByList g = new GroupByList(SqlBuilder.DefaultFormatter, c);
+			g.Raw("[t].[column]");
+
+			string result = g.GetSql();
+			string sql = "[t].[column]";
+
+			Assert.AreEqual(sql, result);
+		}
+
+		[TestMethod]
+		[TestCategory("GroupBy")]
+		public void GroupByRaw2()
+		{
+			SqlBuilder.DefaultFormatter = FormatterLibrary.MsSql;
+
+			ColumnsListAggregation c = new ColumnsListAggregation(SqlBuilder.DefaultFormatter);
+			GroupByList g = new GroupByList(SqlBuilder.DefaultFormatter, c);
+			g.Raw("[t].[column]", "[g].[guid]");
+
+			string result = g.GetSql();
+			string sql = "[t].[column], [g].[guid]";
+
+			Assert.AreEqual(sql, result);
+		}
+
+		[TestMethod]
+		[TestCategory("GroupBy")]
+		public void GroupByAlias1()
+		{
+			SqlBuilder.DefaultFormatter = FormatterLibrary.MsSql;
+
+			ColumnsListAggregation c = new ColumnsListAggregation(SqlBuilder.DefaultFormatter);
+			GroupByList g = new GroupByList(SqlBuilder.DefaultFormatter, c);
+			g.Append(false, "c1");
+			g.SetTableAlias("oh2");
+			g.Append(false, "c2");
+			g.SetTableAlias("oh3");
+			g.Append(false, "c3");
+			g.SetTableAlias();
+			g.Append(false, "c4");
+			g.Raw("[t].[column]");
+
+			string result = g.GetSql("t");
+			string sql = "[t].[c1], [oh2].[c2], [oh3].[c3], [t].[c4], [t].[column]";
+
+			Assert.AreEqual(sql, result);
+		}
+
+		[TestMethod]
+		[TestCategory("GroupBy")]
+		public void GroupByAlias2()
+		{
+			SqlBuilder.DefaultFormatter = FormatterLibrary.MsSql;
+
+			ColumnsListAggregation c = new ColumnsListAggregation(SqlBuilder.DefaultFormatter);
+			GroupByList g = new GroupByList(SqlBuilder.DefaultFormatter, c);
+			g.Append(false, "c1");
+			g.SetTableAlias("oh2");
+			g.Append(false, "c2");
+			g.SetTableAlias("oh3");
+			g.Append(false, "c3");
+			g.SetTableAlias();
+			g.Append(false, "c4");
+			g.Raw("[t].[column]");
+
+			string result = g.GetSql();
+			string sql = "[c1], [oh2].[c2], [oh3].[c3], [c4], [t].[column]";
+
+			Assert.AreEqual(sql, result);
 		}
 
 	}

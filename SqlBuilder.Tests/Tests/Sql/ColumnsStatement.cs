@@ -122,6 +122,46 @@ namespace SqlBuilder.Tests
 			Assert.AreEqual(sql, result);
 		}
 
+		[TestMethod]
+		[TestCategory("Columns - List")]
+		public void ColumnsListTableAlias1()
+		{
+			SqlBuilder.DefaultFormatter = FormatterLibrary.MsSql;
+
+			ColumnsListSimple c = new ColumnsListSimple(SqlBuilder.DefaultFormatter);
+			c.Append("a");
+			c.SetTableAlias("t1");
+			c.Append("b");
+			c.SetTableAlias("t2");
+			c.Append("c");
+			c.SetTableAlias("");
+			c.Raw("(SELECT NOW())");
+			c.Append("d");
+			string result = c.GetSql("t");
+			string sql = "[tbl].[a], [t1].[b], [t2].[c], (SELECT NOW()), [tbl].[d]";
+			Assert.AreEqual(sql, result);
+		}
+
+		[TestMethod]
+		[TestCategory("Columns - List")]
+		public void ColumnsListTableAlias2()
+		{
+			SqlBuilder.DefaultFormatter = FormatterLibrary.MsSql;
+
+			ColumnsListSimple c = new ColumnsListSimple(SqlBuilder.DefaultFormatter);
+			c.Append("a");
+			c.SetTableAlias("t1");
+			c.Append("b");
+			c.SetTableAlias("t2");
+			c.Append("c");
+			c.SetTableAlias("");
+			c.Raw("(SELECT NOW())");
+			c.Append("d");
+			string result = c.GetSql();
+			string sql = "[a], [t1].[b], [t2].[c], (SELECT NOW()), [d]";
+			Assert.AreEqual(sql, result);
+		}
+
 	}
 
 }

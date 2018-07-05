@@ -17,6 +17,8 @@ namespace SqlBuilder.Sql
 
 		public IEnumerable<IGroupBy> Expressions { get; }
 
+		public string TableAlias { get; set; }
+
 		public int Count
 		{
 			get
@@ -51,9 +53,33 @@ namespace SqlBuilder.Sql
 		{
 			foreach (string column in columns)
 			{
-				GroupBy expression = new GroupBy(column);
+				GroupBy expression = new GroupBy(column)
+				{
+					IsRaw = false,
+					TableAlias = this.TableAlias,
+				};
 				this.Append(expression, copyToColumns);
 			}
+			return this;
+		}
+
+		public IGroupByList Raw(params string[] rawSql)
+		{
+			foreach (string sql in rawSql)
+			{
+				GroupBy expression = new GroupBy(sql)
+				{
+					IsRaw = true,
+					TableAlias = string.Empty,
+				};
+				this.Append(expression);
+			}
+			return this;
+		}
+
+		public IGroupByList SetTableAlias(string tableAlias = "")
+		{
+			this.TableAlias = tableAlias;
 			return this;
 		}
 
@@ -105,7 +131,10 @@ namespace SqlBuilder.Sql
 					sb.Append(", ");
 				else
 					sep = true;
-				sb.Append(SqlBuilder.FormatColumn(expression.Column, this.Parameters, tableAlias));
+				if (expression.IsRaw)
+					sb.Append(expression.Column);
+				else
+					sb.Append(SqlBuilder.FormatColumn(expression.Column, this.Parameters, string.IsNullOrEmpty(expression.TableAlias) ? tableAlias : expression.TableAlias));
 			}
 
 			return sb.ToString();

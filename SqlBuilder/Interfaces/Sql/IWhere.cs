@@ -17,7 +17,11 @@ namespace SqlBuilder.Interfaces
 
 		string Postfix { get; set; }
 
+		string TableAlias { get; set; }
+
 		bool IsColumn { get; set; }
+
+		bool IsRaw { get; set; }
 
 		string Column { get; set; }
 

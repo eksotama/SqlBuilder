@@ -15,6 +15,8 @@ namespace SqlBuilder.Sql
 
 		public IFormatter Parameters { get; set; }
 
+		public string TableAlias { get; set; }
+
 		public IEnumerable<IColumn> Expressions
 		{
 			get
@@ -57,19 +59,17 @@ namespace SqlBuilder.Sql
 					: SqlBuilder.FormatTableAlias(tableAlias, this.Parameters) + ".*";
 			}
 
+			string table;
 			StringBuilder sb = new StringBuilder();
 			foreach (IColumn column in this.Expressions)
 			{
+				table = string.IsNullOrEmpty(column.TableAlias) ? tableAlias : column.TableAlias;
 				if (sb.Length > 0)
 					sb.Append(", ");
-				if (!string.IsNullOrEmpty(tableAlias) && !column.IsRaw)
-					sb.Append(SqlBuilder.FormatTableAlias(tableAlias, this.Parameters) + '.');
+				if (!string.IsNullOrEmpty(table) && !column.IsRaw)
+					sb.Append(SqlBuilder.FormatTableAlias(table, this.Parameters) + '.');
 				if (column.IsRaw)
-				{
-					//sb.Append('(');
 					sb.Append(column.Value);
-					//sb.Append(')');
-				}
 				else
 				{
 					sb.Append(column.Prefix);

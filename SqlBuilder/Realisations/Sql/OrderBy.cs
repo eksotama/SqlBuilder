@@ -28,6 +28,8 @@ namespace SqlBuilder.Sql
 		{
 			switch(this.Direction)
 			{
+				case OrderDirection.RAW:
+					return string.Empty;
 				case OrderDirection.DESC:
 					return "DESC";
 				default:
@@ -36,18 +38,18 @@ namespace SqlBuilder.Sql
 			}
 		}
 
-		public static IOrderBy Ascending(string column, string tableAlias = "", bool isRaw = false)
+		public static IOrderBy Ascending(string column, string tableAlias = "")
 		{
 			IOrderBy result = new OrderBy(column, OrderDirection.ASC);
-			result.IsRaw = isRaw;
+			result.IsRaw = false;
 			result.TableAlias = tableAlias;
 			return result;
 		}
 
-		public static IOrderBy Descending(string column, string tableAlias = "", bool isRaw = false)
+		public static IOrderBy Descending(string column, string tableAlias = "")
 		{
 			IOrderBy result = new OrderBy(column, OrderDirection.DESC);
-			result.IsRaw = isRaw;
+			result.IsRaw = false;
 			result.TableAlias = tableAlias;
 			return result;
 		}

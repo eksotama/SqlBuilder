@@ -16,6 +16,8 @@ namespace SqlBuilder.Sql
 
 		public bool IsRaw { get; set; }
 
+		public string TableAlias { get; set; }
+
 	}
 
 }

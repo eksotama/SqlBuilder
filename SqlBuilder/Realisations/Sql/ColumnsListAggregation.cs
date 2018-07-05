@@ -41,6 +41,7 @@ namespace SqlBuilder.Sql
 				Postfix = postfix,
 				Prefix = prefix,
 				IsRaw = false,
+				TableAlias = this.TableAlias,
 			};
 			this.Append(column);
 			return this;
@@ -90,6 +91,12 @@ namespace SqlBuilder.Sql
 		public IColumnsListAggregation FuncSum(string name, string aliasName = "")
 		{
 			this.AppendAlias("*", aliasName, "SUM(", ")");
+			return this;
+		}
+
+		public IColumnsListAggregation SetTableAlias(string tableAlias = "")
+		{
+			this.TableAlias = tableAlias;
 			return this;
 		}
 

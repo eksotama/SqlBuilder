@@ -422,6 +422,29 @@ namespace SqlBuilder.Tests
 
 		#endregion
 
+		#region Table Alias
+
+		[TestMethod]
+		[TestCategory("Where - TableAlias")]
+		public void WhereTableAlias1()
+		{
+			SqlBuilder.DefaultFormatter = FormatterLibrary.MsSql;
+
+			WhereList w = new WhereList(SqlBuilder.DefaultFormatter);
+			w.Raw("[a] IS NULL");
+			w.SetTableAlias("ttt");
+			w.Equal("id");
+			w.SetTableAlias("ddd");
+			w.Equal("age");
+			w.SetTableAlias();
+			w.Equal("old_value");
+			string result = w.GetSql("old");
+			string sql = "[a] IS NULL AND [ttt].[id]=@id AND [ddd].[age]=@age AND [old].[old_value]=@old_value";
+			Assert.AreEqual(sql, result);
+		}
+
+		#endregion
+
 	}
 
 }

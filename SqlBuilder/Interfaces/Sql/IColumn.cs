@@ -18,6 +18,8 @@ namespace SqlBuilder.Interfaces
 
 		bool IsRaw { get; set; }
 
+		string TableAlias { get; set; }
+
 	}
 
 }

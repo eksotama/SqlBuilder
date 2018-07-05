@@ -20,6 +20,8 @@ namespace SqlBuilder.Sql
 
 		public int Level { get; private set; }
 
+		public string TableAlias { get; set; }
+
 		public IEnumerable<IWhere> Expressions
 		{
 			get
@@ -72,9 +74,16 @@ namespace SqlBuilder.Sql
 			}
 		}
 
-		public void Append(IWhere expression)
+		public IWhereList Append(IWhere expression)
 		{
 			this._expressions.Add(expression);
+			return this;
+		}
+
+		public IWhereList SetTableAlias(string tableAlias = "")
+		{
+			this.TableAlias = tableAlias;
+			return this;
 		}
 
 		public void Clear()
@@ -84,19 +93,26 @@ namespace SqlBuilder.Sql
 
 		private void CreateExpression(Enums.WhereType type, string column, string value, string prefix = "", string postfix = "")
 		{
-			IWhere exp = new Where(type, this.LogicOperator);
-			exp.Column = column;
-			exp.IsColumn = true;
-			exp.Value = value;
-			exp.Prefix = prefix;
-			exp.Postfix = postfix;
+			IWhere exp = new Where(type, this.LogicOperator)
+			{
+				Column = column,
+				IsColumn = true,
+				IsRaw = false,
+				Value = value,
+				Prefix = prefix,
+				Postfix = postfix,
+				TableAlias = this.TableAlias,
+			};
 			this.Append(exp);
 		}
 
 		private void CreateParenthesis(Enums.Parenthesis parenthesis, string value = "")
 		{
-			IWhere exp = new Where(Enums.WhereType.None, this.LogicOperator, parenthesis);
-			exp.Value = value;
+			IWhere exp = new Where(Enums.WhereType.None, this.LogicOperator, parenthesis)
+			{
+				Value = value,
+				TableAlias = this.TableAlias,
+			};
 			this.Append(exp);
 		}
 
@@ -106,9 +122,13 @@ namespace SqlBuilder.Sql
 
 		public IWhereList Raw(string rawSql)
 		{
-			IWhere exp = new Where(Enums.WhereType.Raw, this.LogicOperator);
-			exp.IsColumn = false;
-			exp.Value = rawSql;
+			IWhere exp = new Where(Enums.WhereType.Raw, this.LogicOperator)
+			{
+				IsColumn = false,
+				IsRaw = true,
+				Value = rawSql,
+				TableAlias = string.Empty,
+			};
 			this.Append(exp);
 			return this;
 		}
@@ -321,7 +341,7 @@ namespace SqlBuilder.Sql
 				else
 				{
 					if (expression.IsColumn)
-						sb.Append(SqlBuilder.FormatColumn(expression.Column, tableAlias));
+						sb.Append(SqlBuilder.FormatColumn(expression.Column, string.IsNullOrEmpty(expression.TableAlias) ? tableAlias : expression.TableAlias));
 
 					sb.Append(expression.Value);
 					lastparenthesis = false;

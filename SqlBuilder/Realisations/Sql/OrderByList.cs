@@ -29,6 +29,8 @@ namespace SqlBuilder.Sql
 			}
 		}
 
+		public string TableAlias { get; set; }
+
 		public OrderByList(IFormatter parameters)
 		{
 			this._expressions = new List<IOrderBy>();
@@ -50,16 +52,9 @@ namespace SqlBuilder.Sql
 		{
 			foreach(string column in columns)
 			{
-				IOrderBy expression = OrderBy.Ascending(column);
+				IOrderBy expression = OrderBy.Ascending(column, this.TableAlias);
 				this.Append(expression);
 			}
-			return this;
-		}
-
-		public IOrderByList AscendingValue(string column, string tableAlias)
-		{
-			IOrderBy expression = OrderBy.Ascending(column, tableAlias);
-			this.Append(expression);
 			return this;
 		}
 
@@ -67,16 +62,15 @@ namespace SqlBuilder.Sql
 		{
 			foreach (string column in columns)
 			{
-				IOrderBy expression = OrderBy.Descending(column);
+				IOrderBy expression = OrderBy.Descending(column, this.TableAlias);
 				this.Append(expression);
 			}
 			return this;
 		}
 
-		public IOrderByList DescendingValue(string column, string tableAlias)
+		public IOrderByList SetTableAlias(string tableAlias = "")
 		{
-			IOrderBy expression = OrderBy.Descending(column, tableAlias);
-			this.Append(expression);
+			this.TableAlias = tableAlias;
 			return this;
 		}
 
@@ -101,7 +95,7 @@ namespace SqlBuilder.Sql
 				if (expression.IsRaw)
 					sb.Append(expression.Column);
 				else
-					sb.Append(SqlBuilder.FormatColumn(expression.Column, this.Parameters, tableAlias) + " " + expression.GetDirection());
+					sb.Append(SqlBuilder.FormatColumn(expression.Column, this.Parameters, string.IsNullOrEmpty(expression.TableAlias) ? tableAlias : expression.TableAlias) + " " + expression.GetDirection());
 			}
 
 			return sb.ToString();

@@ -15,7 +15,11 @@ namespace SqlBuilder.Sql
 
 		public bool IsColumn { get; set; }
 
+		public bool IsRaw { get; set; }
+
 		public string Column { get; set; }
+
+		public string TableAlias { get; set; }
 
 		public string Prefix { get; set; }
 

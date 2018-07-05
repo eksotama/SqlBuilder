@@ -12,9 +12,14 @@ namespace SqlBuilder.Sql
 
 		public string Column { get; set; }
 
-		public GroupBy(string column)
+		public string TableAlias { get; set; }
+
+		public bool IsRaw { get; set; }
+
+		public GroupBy(string column, string tableAlias = "")
 		{
 			this.Column = column;
+			this.TableAlias = tableAlias;
 		}
 
 	}

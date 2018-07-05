@@ -18,7 +18,11 @@ namespace SqlBuilder.Interfaces
 
 		void Clear();
 
-		void Append(IWhere expression);
+		IWhereList Append(IWhere expression);
+
+		string TableAlias { get; set; }
+
+		IWhereList SetTableAlias(string tableAlias = "");
 
 		//Flags
 		Enums.WhereLogic LogicOperator { get; }
@@ -77,13 +81,13 @@ namespace SqlBuilder.Interfaces
 		IWhereList IsNotNULL(params string[] columns);
 
 		//Exp between/like
-		IWhereList Between(string name, string begin, string end);
+		IWhereList Between(string column, string begin, string end);
 
-		IWhereList NotBetween(string name, string begin, string end);
+		IWhereList NotBetween(string column, string begin, string end);
 
-		IWhereList Like(string name, string pattern);
+		IWhereList Like(string column, string pattern);
 
-		IWhereList NotLike(string name, string pattern);
+		IWhereList NotLike(string column, string pattern);
 
 	}
 

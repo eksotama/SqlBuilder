@@ -41,6 +41,7 @@ namespace SqlBuilder.Sql
 				Postfix = postfix,
 				Prefix = prefix,
 				IsRaw = false,
+				TableAlias = this.TableAlias,
 			};
 			this.Append(column);
 			return this;
@@ -55,6 +56,7 @@ namespace SqlBuilder.Sql
 				Postfix = string.Empty,
 				Prefix = string.Empty,
 				IsRaw = true,
+				TableAlias = string.Empty,
 			};
 			this.Append(column);
 			return this;
@@ -66,6 +68,12 @@ namespace SqlBuilder.Sql
 			{
 				this.Raw(sql);
 			}
+			return this;
+		}
+
+		public IColumnsListSimple SetTableAlias(string tableAlias = "")
+		{
+			this.TableAlias = tableAlias;
 			return this;
 		}
 
