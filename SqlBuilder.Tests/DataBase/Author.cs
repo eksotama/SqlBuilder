@@ -13,6 +13,9 @@ namespace SqlBuilder.Tests.DataBaseDemo
 		[PrimaryKey, IgnoreInsert, IgnoreUpdate]
 		public int ID { get; set; }
 
+		[IgnoreInsert]
+		public DateTime Created_At { get; set; }
+
 		public string FirstName { get; set; }
 
 		public string LastName { get; set; }

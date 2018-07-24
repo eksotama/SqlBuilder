@@ -42,20 +42,17 @@ namespace SqlBuilder
 		private void Mapping()
 		{
 			bool ignore;
-			string columnName, defaultValue;
+			string columnName;
 			Type type = typeof(T);
 			foreach (PropertyInfo property in type.GetProperties())
 			{
 				ignore = false;
-				defaultValue = string.Empty;
 				columnName = property.Name.ToLower();
 
 				foreach (Attribute attribute in property.GetCustomAttributes())
 				{
-					if (attribute is IgnoreInsertAttribute)
+					if (attribute is IgnoreUpdateAttribute)
 						ignore = true;
-					if (attribute is InsertDefaultAttribute insertDefault)
-						defaultValue = insertDefault.DefaultValue;
 					if (attribute is ColumnAttribute clm)
 						columnName = clm.ColumnName.ToLower();
 				}
@@ -63,11 +60,6 @@ namespace SqlBuilder
 				if (!ignore)
 				{
 					this.Sets.AppendValue(columnName, this.Formatter.Parameter + columnName);
-					//this.Columns.Append(columnName == string.Empty ? property.Name.ToLower() : columnName);
-					//if (defaultValue == string.Empty)
-					//	this.Values.Append(this.Formatter.Parameter + property.Name.ToLower());
-					//else
-					//	this.Values.Append(defaultValue);
 				}
 			}
 		}
