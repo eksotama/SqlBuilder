@@ -71,7 +71,7 @@ namespace SqlBuilder.Tests
 			Update<DataBaseDemo.Author> u = new Update<DataBaseDemo.Author>(true);
 
 			string result = u.GetSql();
-			string sql = "UPDATE [tab_authors] SET [firstname]=@firstname, [lastname]=@lastname;";
+			string sql = "UPDATE [tab_authors] SET [created_at]=@created_at, [firstname]=@firstname, [lastname]=@lastname;";
 			Assert.AreEqual(sql, result);
 		}
 
@@ -98,7 +98,7 @@ namespace SqlBuilder.Tests
 			u.Where.Equal("id").IsNULL("is_activated");
 
 			string result = u.GetSql();
-			string sql = "UPDATE [tab_authors] SET [firstname]=@firstname, [lastname]=@lastname WHERE [id]=@id AND [is_activated] IS NULL;";
+			string sql = "UPDATE [tab_authors] SET [created_at]=@created_at, [firstname]=@firstname, [lastname]=@lastname WHERE [id]=@id AND [is_activated] IS NULL;";
 			Assert.AreEqual(sql, result);
 		}
 

@@ -30,7 +30,7 @@ namespace SqlBuilder.Tests
 			SqlBuilder.DefaultFormatter = FormatterLibrary.MsSql;
 
 			var q1 = new Delete<DataBaseDemo.Author>();
-			q1.WhereLinq(x => x.Equal("a").IsNULL("b"));
+			q1.Where(x => x.Equal("a").IsNULL("b"));
 			string result = q1.GetSql();
 			string sql = "DELETE FROM [tab_authors] WHERE [a]=@a AND [b] IS NULL;";
 			Assert.AreEqual(result, sql);
@@ -42,7 +42,7 @@ namespace SqlBuilder.Tests
 		{
 			SqlBuilder.DefaultFormatter = FormatterLibrary.MsSql;
 
-			string result = Query<DataBaseDemo.Author>.CreateDelete().WhereLinq(x=>x.Equal("a")).GetSql();
+			string result = Query<DataBaseDemo.Author>.CreateDelete().Where(x=>x.Equal("a")).GetSql();
 			string sql = "DELETE FROM [tab_authors] WHERE [a]=@a;";
 			Assert.AreEqual(result, sql);
 		}
@@ -53,7 +53,7 @@ namespace SqlBuilder.Tests
 		{
 			SqlBuilder.DefaultFormatter = FormatterLibrary.MsSql;
 
-			string result = Query<DataBaseDemo.Author>.CreateDelete("t").WhereLinq(x => x.Equal("a")).GetSql();
+			string result = Query<DataBaseDemo.Author>.CreateDelete("t").Where(x => x.Equal("a")).GetSql();
 			string sql = "DELETE FROM [tab_authors] as [t] WHERE [t].[a]=@a;";
 			Assert.AreEqual(result, sql);
 		}

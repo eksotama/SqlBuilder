@@ -138,7 +138,7 @@ namespace SqlBuilder.Tests
 			c.Raw("(SELECT NOW())");
 			c.Append("d");
 			string result = c.GetSql("t");
-			string sql = "[tbl].[a], [t1].[b], [t2].[c], (SELECT NOW()), [tbl].[d]";
+			string sql = "[t].[a], [t1].[b], [t2].[c], (SELECT NOW()), [t].[d]";
 			Assert.AreEqual(sql, result);
 		}
 

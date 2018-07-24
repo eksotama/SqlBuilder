@@ -16,7 +16,7 @@ namespace SqlBuilder.Tests
 		public void LinqUpdateSimpleWhere()
 		{
 			var q1 = new Update<DataBaseDemo.Author>();
-			q1.SetsLinq(x=>x.AppendValue("name", "value")).WhereLinq(x => x.Equal("a").IsNULL("b"));
+			q1.Sets(x=>x.AppendValue("name", "value")).Where(x => x.Equal("a").IsNULL("b"));
 			string result = q1.GetSql();
 			string sql = "UPDATE [tab_authors] SET [name]=value WHERE [a]=@a AND [b] IS NULL;";
 			Assert.AreEqual(result, sql);
@@ -26,7 +26,7 @@ namespace SqlBuilder.Tests
 		[TestCategory("Linq")]
 		public void LinqQueryUpdateSimpleWhere()
 		{
-			string result = Query<DataBaseDemo.Author>.CreateUpdate().SetsLinq(x=>x.AppendValue("count", "123")).WhereLinq(x=>x.Equal("a")).GetSql();
+			string result = Query<DataBaseDemo.Author>.CreateUpdate().Sets(x=>x.AppendValue("count", "123")).Where(x=>x.Equal("a")).GetSql();
 			string sql = "UPDATE [tab_authors] SET [count]=123 WHERE [a]=@a;";
 			Assert.AreEqual(result, sql);
 		}

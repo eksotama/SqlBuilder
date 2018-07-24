@@ -18,7 +18,7 @@ namespace SqlBuilder.Tests
 			SqlBuilder.DefaultFormatter = FormatterLibrary.MsSql;
 
 			var q1 = new Insert<DataBaseDemo.Author>(false);
-			q1.ColumnsLinq(x => x.Append("a", "b", "c")).ValuesLinq(x=>x.Append("a", "b", "c"));
+			q1.Columns(x => x.Append("a", "b", "c")).Values(x=>x.Append("a", "b", "c"));
 			string result = q1.GetSql();
 			string sql = "INSERT INTO [tab_authors]([a], [b], [c]) VALUES(a, b, c);";
 			Assert.AreEqual(result, sql);
@@ -30,7 +30,7 @@ namespace SqlBuilder.Tests
 		{
 			SqlBuilder.DefaultFormatter = FormatterLibrary.MsSql;
 
-			string result = Query<DataBaseDemo.Author>.CreateInsert(false).ColumnsLinq(x => x.Append("a", "b", "c")).ValuesLinq(x => x.Append("a", "b", "c")).GetSql();
+			string result = Query<DataBaseDemo.Author>.CreateInsert(false).Columns(x => x.Append("a", "b", "c")).Values(x => x.Append("a", "b", "c")).GetSql();
 			string sql = "INSERT INTO [tab_authors]([a], [b], [c]) VALUES(a, b, c);";
 			Assert.AreEqual(result, sql);
 		}
