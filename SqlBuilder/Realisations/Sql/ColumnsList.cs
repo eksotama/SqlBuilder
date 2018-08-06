@@ -66,7 +66,7 @@ namespace SqlBuilder.Sql
 				table = string.IsNullOrEmpty(column.TableAlias) ? tableAlias : column.TableAlias;
 				if (sb.Length > 0)
 					sb.Append(", ");
-				if (!string.IsNullOrEmpty(table) && !column.IsRaw)
+				if (!string.IsNullOrEmpty(table) && !column.IsRaw && !column.IsAggregation)
 					sb.Append(SqlBuilder.FormatTableAlias(table, this.Parameters) + '.');
 				if (column.IsRaw)
 					sb.Append(column.Value);

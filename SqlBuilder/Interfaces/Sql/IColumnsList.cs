@@ -29,9 +29,9 @@ namespace SqlBuilder.Interfaces
 
 		T Append(params string[] names);
 
-		T AppendAlias(string name, string alias, string prefix = "", string postfix = "");
+		T AppendAlias(string name, string alias, string prefix = "", string postfix = "", bool isAggregation = false);
 
-		T Raw(string rawSql, string alias = "");
+		T RawValue(string rawSql, string alias = "");
 
 		T Raw(params string[] rawSql);
 

@@ -32,7 +32,7 @@ namespace SqlBuilder.Sql
 			return this;
 		}
 
-		public IColumnsListSimple AppendAlias(string name, string alias, string prefix = "", string postfix = "")
+		public IColumnsListSimple AppendAlias(string name, string alias, string prefix = "", string postfix = "", bool isAggregation = false)
 		{
 			Column column = new Column()
 			{
@@ -41,13 +41,14 @@ namespace SqlBuilder.Sql
 				Postfix = postfix,
 				Prefix = prefix,
 				IsRaw = false,
+				IsAggregation = isAggregation,
 				TableAlias = this.TableAlias,
 			};
 			this.Append(column);
 			return this;
 		}
 
-		public IColumnsListSimple Raw(string rawSql, string alias = "")
+		public IColumnsListSimple RawValue(string rawSql, string alias = "")
 		{
 			Column column = new Column()
 			{
@@ -56,6 +57,7 @@ namespace SqlBuilder.Sql
 				Postfix = string.Empty,
 				Prefix = string.Empty,
 				IsRaw = true,
+				IsAggregation = false,
 				TableAlias = string.Empty,
 			};
 			this.Append(column);
@@ -66,7 +68,7 @@ namespace SqlBuilder.Sql
 		{
 			foreach(string sql in rawSql)
 			{
-				this.Raw(sql);
+				this.RawValue(sql);
 			}
 			return this;
 		}

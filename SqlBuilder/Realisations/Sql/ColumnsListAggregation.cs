@@ -32,7 +32,7 @@ namespace SqlBuilder.Sql
 			return this;
 		}
 
-		public IColumnsListAggregation AppendAlias(string name, string alias, string prefix = "", string postfix = "")
+		public IColumnsListAggregation AppendAlias(string name, string alias, string prefix = "", string postfix = "", bool isAggregation = false)
 		{
 			Column column = new Column()
 			{
@@ -41,13 +41,14 @@ namespace SqlBuilder.Sql
 				Postfix = postfix,
 				Prefix = prefix,
 				IsRaw = false,
+				IsAggregation = isAggregation,
 				TableAlias = this.TableAlias,
 			};
 			this.Append(column);
 			return this;
 		}
 
-		public IColumnsListAggregation Raw(string rawSql, string alias = "")
+		public IColumnsListAggregation RawValue(string rawSql, string alias = "")
 		{
 			Column column = new Column()
 			{
@@ -56,6 +57,7 @@ namespace SqlBuilder.Sql
 				Postfix = string.Empty,
 				Prefix = string.Empty,
 				IsRaw = true,
+				IsAggregation = false,
 			};
 			this.Append(column);
 			return this;
@@ -65,32 +67,32 @@ namespace SqlBuilder.Sql
 		{
 			foreach(string sql in rawSql)
 			{
-				this.Raw(sql);
+				this.RawValue(sql);
 			}
 			return this;
 		}
 
 		public IColumnsListAggregation FuncMax(string name, string aliasName = "")
 		{
-			this.AppendAlias(name, aliasName, "MAX(", ")");
+			this.AppendAlias(name, aliasName, "MAX(", ")", true);
 			return this;
 		}
 
 		public IColumnsListAggregation FuncMin(string name, string aliasName = "")
 		{
-			this.AppendAlias(name, aliasName, "MIN(", ")");
+			this.AppendAlias(name, aliasName, "MIN(", ")", true);
 			return this;
 		}
 
 		public IColumnsListAggregation FuncCount(string name, string aliasName = "")
 		{
-			this.AppendAlias(name, aliasName, "COUNT(", ")");
+			this.AppendAlias(name, aliasName, "COUNT(", ")", true);
 			return this;
 		}
 
 		public IColumnsListAggregation FuncSum(string name, string aliasName = "")
 		{
-			this.AppendAlias("*", aliasName, "SUM(", ")");
+			this.AppendAlias("*", aliasName, "SUM(", ")", true);
 			return this;
 		}
 
