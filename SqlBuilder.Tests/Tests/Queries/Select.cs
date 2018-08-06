@@ -75,6 +75,38 @@ namespace SqlBuilder.Tests
 
 		#endregion
 
+		#region Select aggregation functions
+
+		[TestMethod]
+		[TestCategory("Query - Select")]
+		public void QuerySelectAggregation1()
+		{
+			SqlBuilder.DefaultFormatter = FormatterLibrary.MsSql;
+
+			Select<DataBaseDemo.Author> s = new Select<DataBaseDemo.Author>("a");
+			s.Columns.FuncCount("cnt");
+
+			string result = s.GetSql();
+			string sql = "SELECT COUNT([cnt]) FROM [tab_authors] as [a];";
+			Assert.AreEqual(sql, result);
+		}
+
+		[TestMethod]
+		[TestCategory("Query - Select")]
+		public void QuerySelectAggregation2()
+		{
+			SqlBuilder.DefaultFormatter = FormatterLibrary.MsSql;
+
+			Select<DataBaseDemo.Author> s = new Select<DataBaseDemo.Author>("a");
+			s.Columns.FuncMax("m1").FuncMin("m2");
+
+			string result = s.GetSql();
+			string sql = "SELECT MAX([m1]), MIN([m2]) FROM [tab_authors] as [a];";
+			Assert.AreEqual(sql, result);
+		}
+
+		#endregion
+
 		#region Select Where
 
 		[TestMethod]

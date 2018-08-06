@@ -114,8 +114,8 @@ namespace SqlBuilder.Tests
 			ColumnsListSimple c = new ColumnsListSimple(SqlBuilder.DefaultFormatter);
 			c.Append("a", "b", "c");
 			c.AppendAlias("last_name", "l");
-			c.Raw("(SELECT NOW())");
-			c.Raw("(SELECT 'abc')", "lll");
+			c.RawValue("(SELECT NOW())");
+			c.RawValue("(SELECT 'abc')", "lll");
 			c.Append("d");
 			string result = c.GetSql("tbl");
 			string sql = "[tbl].[a], [tbl].[b], [tbl].[c], [tbl].[last_name] as 'l', (SELECT NOW()), (SELECT 'abc') as 'lll', [tbl].[d]";
@@ -135,7 +135,7 @@ namespace SqlBuilder.Tests
 			c.SetTableAlias("t2");
 			c.Append("c");
 			c.SetTableAlias("");
-			c.Raw("(SELECT NOW())");
+			c.RawValue("(SELECT NOW())");
 			c.Append("d");
 			string result = c.GetSql("t");
 			string sql = "[t].[a], [t1].[b], [t2].[c], (SELECT NOW()), [t].[d]";
@@ -155,7 +155,7 @@ namespace SqlBuilder.Tests
 			c.SetTableAlias("t2");
 			c.Append("c");
 			c.SetTableAlias("");
-			c.Raw("(SELECT NOW())");
+			c.RawValue("(SELECT NOW())");
 			c.Append("d");
 			string result = c.GetSql();
 			string sql = "[a], [t1].[b], [t2].[c], (SELECT NOW()), [d]";

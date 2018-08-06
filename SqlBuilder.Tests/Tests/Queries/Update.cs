@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using SqlBuilder.Linq;
 
 namespace SqlBuilder.Tests
 {
@@ -99,6 +100,7 @@ namespace SqlBuilder.Tests
 
 			string result = u.GetSql();
 			string sql = "UPDATE [tab_authors] SET [created_at]=@created_at, [firstname]=@firstname, [lastname]=@lastname WHERE [id]=@id AND [is_activated] IS NULL;";
+
 			Assert.AreEqual(sql, result);
 		}
 
