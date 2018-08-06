@@ -64,7 +64,7 @@ namespace SqlBuilder
 			}
 		}
 
-		public string GetSql()
+		public string GetSql(bool EndOfStatement = true)
 		{
 			string table = Reflection.GetTableName<T>();
 
@@ -74,7 +74,7 @@ namespace SqlBuilder
 			if (this.Where.Count > 0)
 				result.Append(SnippetLibrary.Where(this.Where.GetSql(this.TableAlias)));
 
-			return result.GetSql();
+			return result.GetSql(EndOfStatement);
 		}
 
 		public override string ToString()

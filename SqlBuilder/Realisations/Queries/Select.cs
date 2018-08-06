@@ -40,7 +40,7 @@ namespace SqlBuilder
 			this.GroupBy = new GroupByList(this.Formatter, this.Columns);
 		}
 
-		public string GetSql()
+		public string GetSql(bool EndOfStatement = true)
 		{
 			string table = Reflection.GetTableName<T>();
 
@@ -60,7 +60,7 @@ namespace SqlBuilder
 			if (this.OrderBy.Count > 0)
 				result.Append(SnippetLibrary.OrderBy(this.OrderBy.GetSql()));
 
-			return result.GetSql();
+			return result.GetSql(EndOfStatement);
 		}
 
 		public override string ToString()

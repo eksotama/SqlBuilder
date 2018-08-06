@@ -18,7 +18,7 @@ namespace SqlBuilder.Interfaces
 
 		ITemplate Append(string name, string code, string prefix = "", string postfix = "");
 
-		string GetSql();
+		string GetSql(bool EndOfStatement = true);
 
 	}
 

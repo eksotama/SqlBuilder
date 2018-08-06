@@ -46,11 +46,12 @@ namespace SqlBuilder.Templates
 			return this;
 		}
 
-		public string GetSql()
+		public string GetSql(bool EndOfStatement = true)
 		{
 			string pattern = this.Pattern;
 
-			this.Append(SnippetLibrary.End(Parameters.EndOfStatement.ToString()));
+			if(EndOfStatement)
+				this.Append(SnippetLibrary.End(Parameters.EndOfStatement.ToString()));
 
 			foreach(ITemplateSnippet snippet in this._expressions)
 			{

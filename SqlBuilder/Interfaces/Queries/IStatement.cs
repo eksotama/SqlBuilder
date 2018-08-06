@@ -12,7 +12,7 @@ namespace SqlBuilder.Interfaces
 
 		Enums.SqlQuery Query { get; }
 
-		string GetSql();
+		string GetSql(bool EndOfStatement = true);
 
 	}
 
