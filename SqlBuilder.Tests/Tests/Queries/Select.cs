@@ -131,7 +131,7 @@ namespace SqlBuilder.Tests
 			Select<DataBaseDemo.Author> s = new Select<DataBaseDemo.Author>("t");
 			s.Where.Equal(global::SqlBuilder.Reflection.GetPrimaryKey<DataBaseDemo.Author>());
 			string result = s.GetSql();
-			string sql = "SELECT [t].* FROM [tab_authors] as [t] WHERE [ID]=@ID;";
+			string sql = "SELECT [t].* FROM [tab_authors] as [t] WHERE [t].[ID]=@ID;";
 			Assert.AreEqual(sql, result);
 		}
 
@@ -339,6 +339,28 @@ namespace SqlBuilder.Tests
 			s.OrderBy.Ascending("age");
 			string result = s.GetSql();
 			string sql = "SELECT [s1], [s2], [s3], MIN([date]), COUNT([lll]) as 'all' FROM [tab_authors] WHERE [s1]=@s1 AND [s2]=@s2 AND [created_at] IS NOT NULL AND [activated] IS NULL GROUP BY [country], [city], [lll] ORDER BY [age] ASC;";
+			Assert.AreEqual(sql, result);
+		}
+
+		#endregion
+
+		#region Select sub query
+
+		[TestMethod]
+		[TestCategory("Query - Select")]
+		public void QuerySelectSubQuery1()
+		{
+			SqlBuilder.DefaultFormatter = FormatterLibrary.MsSql;
+
+			Select<DataBaseDemo.Book> sub = new Select<DataBaseDemo.Book>("b");
+			sub.Columns.FuncCount("id");
+			sub.Where.EqualValue("id_author", "[a].[id]");
+
+			Select<DataBaseDemo.Author> query = new Select<DataBaseDemo.Author>("a");
+			query.Columns.Raw("[a].*");
+			query.Columns.SubQuery(sub, "cnt");
+			string result = query.GetSql();
+			string sql = "SELECT [a].*, (SELECT COUNT([id]) FROM [tab_books] as [b] WHERE [b].[id_author]=[a].[id]) as 'cnt' FROM [tab_authors] as [a];";
 			Assert.AreEqual(sql, result);
 		}
 

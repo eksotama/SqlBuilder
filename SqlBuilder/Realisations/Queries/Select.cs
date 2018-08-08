@@ -54,11 +54,11 @@ namespace SqlBuilder
 				result.Append(SnippetLibrary.Join(this.Join.GetSql(joinTable)));
 			}
 			if (this.Where.Count > 0)
-				result.Append(SnippetLibrary.Where(this.Where.GetSql()));
+				result.Append(SnippetLibrary.Where(this.Where.GetSql(this.TableAlias)));
 			if (this.GroupBy.Count > 0)
-				result.Append(SnippetLibrary.GroupBy(this.GroupBy.GetSql()));
+				result.Append(SnippetLibrary.GroupBy(this.GroupBy.GetSql(this.TableAlias)));
 			if (this.OrderBy.Count > 0)
-				result.Append(SnippetLibrary.OrderBy(this.OrderBy.GetSql()));
+				result.Append(SnippetLibrary.OrderBy(this.OrderBy.GetSql(this.TableAlias)));
 
 			return result.GetSql(EndOfStatement);
 		}

@@ -72,6 +72,14 @@ namespace SqlBuilder.Sql
 			return this;
 		}
 
+		public IColumnsListAggregation SubQuery(IStatementSelect select, string alias = "")
+		{
+			if (!string.IsNullOrEmpty(alias))
+				alias = " as " + SqlBuilder.FormatColumnAlias(alias);
+			this.Raw('(' + select.GetSql(false) + ')' + alias);
+			return this;
+		}
+
 		public IColumnsListAggregation FuncMax(string name, string aliasName = "")
 		{
 			this.AppendAlias(name, aliasName, "MAX(", ")", true);

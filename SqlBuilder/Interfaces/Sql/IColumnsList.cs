@@ -35,6 +35,8 @@ namespace SqlBuilder.Interfaces
 
 		T Raw(params string[] rawSql);
 
+		T SubQuery(IStatementSelect select, string alias = "");
+
 		T SetTableAlias(string tableAlias = "");
 
 	}

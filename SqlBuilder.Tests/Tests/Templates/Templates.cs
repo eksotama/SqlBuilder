@@ -49,6 +49,30 @@ namespace SqlBuilder.Tests
 			Assert.AreEqual(sql, "INSERT INTO [users]([a],[b],[c]) VALUES(@a,@b,@c);");
 		}
 
+		[TestMethod]
+		[TestCategory("Templates")]
+		public void TemplateDelete()
+		{
+			ITemplate t = TemplateLibrary.Delete;
+			t.Append(SnippetLibrary.Table("users"),
+				SnippetLibrary.Where("[id]=@id"));
+			string sql = t.GetSql();
+			Assert.AreEqual(sql, "DELETE FROM [users] WHERE [id]=@id;");
+		}
+
+		[TestMethod]
+		[TestCategory("Templates")]
+		public void TemplateEndOfStatementSelect()
+		{
+			ITemplate t = TemplateLibrary.Select;
+			t.Append(SnippetLibrary.Table("users"),
+				SnippetLibrary.Columns("*"),
+				SnippetLibrary.Where("age>=18"),
+				SnippetLibrary.OrderBy("age ASC"));
+			string sql = t.GetSql(false);
+			Assert.AreEqual(sql, "SELECT * FROM [users] WHERE age>=18 ORDER BY age ASC");
+		}
+
 	}
 
 }

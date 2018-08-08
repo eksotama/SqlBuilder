@@ -73,6 +73,14 @@ namespace SqlBuilder.Sql
 			return this;
 		}
 
+		public IColumnsListSimple SubQuery(IStatementSelect select, string alias = "")
+		{
+			if (!string.IsNullOrEmpty(alias))
+				alias = " AS " + SqlBuilder.FormatColumnAlias(alias);
+			this.Raw('(' + select.GetSql(false) + ')' + alias);
+			return this;
+		}
+
 		public IColumnsListSimple SetTableAlias(string tableAlias = "")
 		{
 			this.TableAlias = tableAlias;
